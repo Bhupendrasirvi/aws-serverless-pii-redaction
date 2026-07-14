@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Serverless PII Redaction Pipeline
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 60
+    MemorySize: 512
+
+Resources:
+
+  IngestionBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub aws-pii-ingestion-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+
+  CleanBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub aws-pii-clean-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+
+Outputs:
+
+  IngestionBucket:
+    Value: !Ref IngestionBucket
+
+  CleanBucket:
+    Value: !Ref CleanBucket
